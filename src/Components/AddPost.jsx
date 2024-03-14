@@ -102,26 +102,24 @@ const AddPost = ({ userRole, currentUser }) => {
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 		// add post owner data
-		for (let i = 0; i < 100; i++) {
-			await fetch(`${url}/api/items`, {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json',
-				},
-				body: JSON.stringify(
-					Object.assign(
-						{},
-						{
-							Owner: currentUser.user_id,
-							createdAt: new Date(),
-							Category: category,
-							Status: 'active',
-							...postData,
-						}
-					)
-				),
-			});
-		}
+		await fetch(`${url}/api/items`, {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify(
+				Object.assign(
+					{},
+					{
+						Owner: currentUser.user_id,
+						createdAt: new Date(),
+						Category: category,
+						Status: 'active',
+						...postData,
+					}
+				)
+			),
+		});
 		window.location.href = '/';
 	};
 
