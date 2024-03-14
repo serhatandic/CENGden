@@ -15,7 +15,6 @@ const Post = ({ post, currentUser }) => {
 	const [userFavorites, setUserFavorites] = useState([]);
 	const [shouldRefetch, setShouldRefetch] = useState(false);
 
-	console.log(userFavorites);
 	useEffect(() => {
 		const fetchUserFavorites = async () => {
 			const favorites = await fetch(

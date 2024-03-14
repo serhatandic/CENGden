@@ -16,7 +16,6 @@ const FavoriteList = ({ currentUser }) => {
 				`${url}/api/items/user/${currentUser.user_id}/favorites`
 			);
 			const data = await favorites.json();
-			console.log(data.length);
 			setUserFavorites([]);
 			for (let i = 0; i < data.length; i++) {
 				const post = await fetch(`${url}/api/item/${data[i]}`);
