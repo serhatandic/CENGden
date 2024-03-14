@@ -30,8 +30,16 @@ const Post = ({ post, currentUser }) => {
 
 	const handleFavoriteChange = (postId, action) => async () => {
 		if (action === 'add') {
+			// update user favorites
 			await fetch(
 				`${url}/api/items/user/${currentUser.user_id}/favorites/${postId}`,
+				{
+					method: 'PUT',
+				}
+			);
+			// update favoritedBy
+			await fetch(
+				`${url}/api/items/${postId}/user/${currentUser.user_id}/favorites`,
 				{
 					method: 'PUT',
 				}
@@ -40,6 +48,12 @@ const Post = ({ post, currentUser }) => {
 		} else if (action === 'remove') {
 			await fetch(
 				`${url}/api/items/user/${currentUser.user_id}/favorites/${postId}`,
+				{
+					method: 'DELETE',
+				}
+			);
+			await fetch(
+				`${url}/api/items/${postId}/user/${currentUser.user_id}/favorites`,
 				{
 					method: 'DELETE',
 				}
@@ -91,13 +105,13 @@ const Post = ({ post, currentUser }) => {
 				</Box>
 			</Box>
 			<Box sx={{ marginTop: '20px' }}>
-				{currentUser.user_id === post.Owner ? (
-					<Box
-						sx={{
-							display: 'flex',
-							justifyContent: 'space-between',
-						}}
-					>
+				<Box
+					sx={{
+						display: 'flex',
+						justifyContent: 'space-between',
+					}}
+				>
+					{currentUser.user_id === post.Owner ? (
 						<Box>
 							<Button
 								sx={{ marginRight: '10px' }}
@@ -122,39 +136,38 @@ const Post = ({ post, currentUser }) => {
 								Delete
 							</Button>
 						</Box>
-						<Box>
-							{userFavorites.includes(post._id) ? (
-								<IconButton
-									onClick={handleFavoriteChange(
-										post._id,
-										'remove'
-									)}
-								>
-									<FavoriteIcon />
-								</IconButton>
-							) : (
-								<IconButton
-									onClick={handleFavoriteChange(
-										post._id,
-										'add'
-									)}
-								>
-									<FavoriteBorderIcon />
-								</IconButton>
-							)}
-
-							<Button
-								onClick={() => {
-									window.location.href = `/post/${post._id}`;
-								}}
-								color='inherit'
-								variant='outlined'
+					) : (
+						<Box></Box>
+					)}
+					<Box>
+						{userFavorites.includes(post._id) ? (
+							<IconButton
+								onClick={handleFavoriteChange(
+									post._id,
+									'remove'
+								)}
 							>
-								Read more
-							</Button>
-						</Box>
+								<FavoriteIcon />
+							</IconButton>
+						) : (
+							<IconButton
+								onClick={handleFavoriteChange(post._id, 'add')}
+							>
+								<FavoriteBorderIcon />
+							</IconButton>
+						)}
+
+						<Button
+							onClick={() => {
+								window.location.href = `/post/${post._id}`;
+							}}
+							color='inherit'
+							variant='outlined'
+						>
+							Read more
+						</Button>
 					</Box>
-				) : null}
+				</Box>
 			</Box>
 		</Box>
 	);

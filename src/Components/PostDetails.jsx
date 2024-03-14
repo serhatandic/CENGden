@@ -9,7 +9,6 @@ const backendPort = import.meta.env.VITE_BACKEND_PORT;
 const url = `${bakcendIp}:${backendPort}`;
 
 const PostDetails = ({ allUsers }) => {
-	console.log(allUsers);
 	const { id } = useParams();
 	const [postDetails, setPostDetails] = useState({});
 	useEffect(() => {
@@ -17,7 +16,6 @@ const PostDetails = ({ allUsers }) => {
 			const response = await fetch(`${url}/api/item/${id}`);
 			const data = await response.json();
 			setPostDetails(data);
-			console.log(data);
 		};
 		fetchPost();
 	}, [id]);

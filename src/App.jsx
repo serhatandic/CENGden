@@ -59,14 +59,19 @@ function App() {
 						/>
 						<Route
 							path='/edit/:id'
-							element={<EditPost currentUser={currentUser} />}
+							element={
+								<EditPost
+									currentUser={currentUser}
+									allUsers={allUsers}
+								/>
+							}
 						/>
 						<Route
 							path='/posts'
 							element={<UserPostList currentUser={currentUser} />}
 						/>
 						<Route
-							path='favorites'
+							path='/favorites'
 							element={<FavoriteList currentUser={currentUser} />}
 						/>
 					</Routes>

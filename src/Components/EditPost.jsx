@@ -2,10 +2,13 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { TextField, Button, Box } from '@mui/material';
+// import sgMail from '@sendgrid/mail';
+import sgMail from '@sendgrid/mail';
 
 const bakcendIp = import.meta.env.VITE_BACKEND_IP;
 const backendPort = import.meta.env.VITE_BACKEND_PORT;
 const url = `${bakcendIp}:${backendPort}`;
+sgMail.setApiKey(import.meta.env.SENDGRID_API_KEY);
 
 const categories = {
 	Vehicles: [
@@ -69,19 +72,28 @@ const categories = {
 	],
 };
 
-const EditPost = ({ currentUser }) => {
+const EditPost = ({ currentUser, allUsers }) => {
 	const { id } = useParams();
 	const [category, setCategory] = useState('Vehicles');
 	const [postData, setPostData] = useState({});
-	console.log(postData);
+	const [prevPrice, setPrevPrice] = useState(999999);
+	const [favoritedBy, setFavoritedBy] = useState([]);
+
 	useEffect(() => {
 		fetch(`${url}/api/item/${id}`)
 			.then((res) => res.json())
 			.then((data) => {
 				setPostData(data);
+				setPrevPrice(data.Price);
 				setCategory(data.Category);
 			});
-	}, [id]);
+
+		fetch(`${url}/api/items/${id}/favoritedBy`)
+			.then((res) => res.json())
+			.then((data) => {
+				setFavoritedBy(data);
+			});
+	}, [id, currentUser]);
 
 	const handleChange = (e) => {
 		const { name, value } = e.target;
@@ -131,7 +143,18 @@ const EditPost = ({ currentUser }) => {
 				)
 			),
 		});
-		window.location.href = '/';
+		if (postData.Price < prevPrice) {
+			allUsers.forEach(async (user) => {
+				if (favoritedBy.includes(user.user_id)) {
+					await fetch(
+						`${url}/api/sendmail/${user.email}/${postData.Title}`,
+						{
+							method: 'POST',
+						}
+					);
+				}
+			});
+		}
 	};
 	return (
 		<div>

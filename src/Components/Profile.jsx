@@ -20,7 +20,6 @@ const Profile = ({ user }) => {
 		setPhone(user?.user_metadata?.phone_number);
 	}, [user]);
 
-	console.log(user);
 	const updateProfile = async () => {
 		const url = `https://${auth0domain}/api/v2/users/${user.user_id}`;
 		const data = {
@@ -39,8 +38,7 @@ const Profile = ({ user }) => {
 		});
 
 		if (response.ok) {
-			const updatedUser = await response.json();
-			console.log('User updated successfully:', updatedUser);
+			await response.json();
 		} else {
 			// Handle errors or unsuccessful updates
 			console.error('Error updating user:', await response.text());
