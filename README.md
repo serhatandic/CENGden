@@ -1,9 +1,1 @@
-# React + Vite
-
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
-
-Currently, two official plugins are available:
-
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
-# CENGden
+I set the authentication token at 14.04.2024, it has 30 days till expiration, if it expires it may cause error related to authentication. I will try to update it throughout the semester but in case you encounter errors related to authentication it would be great if you reached me before giving the final grade.
