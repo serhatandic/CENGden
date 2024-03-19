@@ -16,12 +16,16 @@ const FavoriteList = ({ currentUser }) => {
 				`${url}/api/items/user/${currentUser.user_id}/favorites`
 			);
 			const data = await favorites.json();
+
 			setUserFavorites([]);
+			const tmp = [];
 			for (let i = 0; i < data.length; i++) {
 				const post = await fetch(`${url}/api/item/${data[i]}`);
-				const postData = await post.json();
-				setUserFavorites((prev) => [...prev, postData]);
+				const result = await post.json();
+				const postData = result['result'];
+				tmp.push(postData);
 			}
+			setUserFavorites(tmp);
 		};
 		fetchUserFavorites();
 	}, [currentUser]);
@@ -32,17 +36,19 @@ const FavoriteList = ({ currentUser }) => {
 				marginTop: '10vh',
 			}}
 		>
-			{userFavorites
-				? userFavorites.map((post) => {
-						return (
-							<Post
-								key={post._id}
-								post={post}
-								currentUser={currentUser}
-							/>
-						);
-				  })
-				: null}
+			{userFavorites.map((post) => {
+				console.log(post);
+
+				if (post) {
+					return (
+						<Post
+							key={post._id}
+							post={post}
+							currentUser={currentUser}
+						/>
+					);
+				}
+			})}
 		</Box>
 	);
 };

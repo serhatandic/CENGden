@@ -7,6 +7,7 @@ import LogoutButton from './LogoutButton';
 import { useAuth0 } from '@auth0/auth0-react';
 import { useEffect } from 'react';
 import Box from '@mui/material/Box';
+import { Link } from 'react-router-dom';
 
 const auth0token = import.meta.env.VITE_AUTH0_TOKEN;
 const auth0domain = import.meta.env.VITE_AUTH0_DOMAIN;
@@ -81,53 +82,57 @@ export default function Navbar({
 					justifyContent: 'space-between',
 				}}
 			>
-				<Button
-					onClick={() => {
-						window.location.href = '/';
-					}}
-					color='inherit'
-				>
-					CENGden
-				</Button>
+				<Link to='/'>
+					<Button
+						sx={{
+							color: 'white',
+						}}
+					>
+						CENGden
+					</Button>
+				</Link>
 
 				<Box>
 					{!isLoading && isAuthenticated && (
 						<>
-							<Button
-								onClick={() => {
-									window.location.href = '/favorites';
-								}}
-								color='inherit'
-							>
-								Favorites
-							</Button>
-							<Button
-								color='inherit'
-								onClick={() => {
-									window.location.href = '/add';
-								}}
-							>
-								Add Post
-							</Button>
-							<Button
-								onClick={() => {
-									window.location.href = '/profile';
-								}}
-								color='inherit'
-								endIcon={
-									<img
-										src={user.picture}
-										alt={user.name}
-										style={{
-											borderRadius: '50%',
-											width: '30px',
-											height: '30px',
-										}}
-									/>
-								}
-							>
-								{user.profile}
-							</Button>
+							<Link to={'/favorites'}>
+								<Button
+									sx={{
+										color: 'white',
+									}}
+								>
+									Favorites
+								</Button>
+							</Link>
+							<Link to={'/add'}>
+								<Button
+									sx={{
+										color: 'white',
+									}}
+								>
+									Add Post
+								</Button>
+							</Link>
+							<Link to={'/profile'}>
+								<Button
+									sx={{
+										color: 'white',
+									}}
+									endIcon={
+										<img
+											src={user.picture}
+											alt={user.name}
+											style={{
+												borderRadius: '50%',
+												width: '30px',
+												height: '30px',
+											}}
+										/>
+									}
+								>
+									{user.profile}
+								</Button>
+							</Link>
 						</>
 					)}
 					{!isAuthenticated && <LoginButton />}

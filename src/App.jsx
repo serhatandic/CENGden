@@ -42,7 +42,12 @@ function App() {
 						/>
 						<Route
 							path='/post/:id'
-							element={<PostDetails allUsers={allUsers} />}
+							element={
+								<PostDetails
+									allUsers={allUsers}
+									currentUser={currentUser}
+								/>
+							}
 						/>
 						<Route
 							path='/add'

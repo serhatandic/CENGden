@@ -6,6 +6,7 @@ import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import IconButton from '@mui/material/IconButton';
 import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 
 const bakcendIp = import.meta.env.VITE_BACKEND_IP;
 const backendPort = import.meta.env.VITE_BACKEND_PORT;
@@ -100,6 +101,14 @@ const Post = ({ post, currentUser }) => {
 						>
 							{post.Category}{' '}
 						</Typography>
+						<Typography
+							sx={{
+								color:
+									post.Status === 'active' ? 'green' : 'red',
+							}}
+						>
+							{post.Status === 'inactive' ? 'inactive' : null}
+						</Typography>
 					</Box>
 				</Box>
 			</Box>
@@ -112,16 +121,14 @@ const Post = ({ post, currentUser }) => {
 				>
 					{currentUser.user_id === post.Owner ? (
 						<Box>
-							<Button
-								sx={{ marginRight: '10px' }}
-								onClick={() => {
-									window.location.href = `/edit/${post._id}`;
-								}}
-								color='inherit'
-								variant='outlined'
-							>
-								Edit
-							</Button>
+							<Link to={`/edit/${post._id}`}>
+								<Button
+									sx={{ marginRight: '10px' }}
+									variant='outlined'
+								>
+									Edit
+								</Button>
+							</Link>
 							<Button
 								onClick={async () => {
 									await fetch(url + '/api/item/' + post._id, {
@@ -129,7 +136,6 @@ const Post = ({ post, currentUser }) => {
 									});
 									window.location.href = '/';
 								}}
-								color='inherit'
 								variant='outlined'
 							>
 								Delete
@@ -138,33 +144,40 @@ const Post = ({ post, currentUser }) => {
 					) : (
 						<Box></Box>
 					)}
-					<Box>
-						{userFavorites.includes(post._id) ? (
-							<IconButton
-								onClick={handleFavoriteChange(
-									post._id,
-									'remove'
-								)}
-							>
-								<FavoriteIcon />
-							</IconButton>
-						) : (
-							<IconButton
-								onClick={handleFavoriteChange(post._id, 'add')}
-							>
-								<FavoriteBorderIcon />
-							</IconButton>
-						)}
 
-						<Button
-							onClick={() => {
-								window.location.href = `/post/${post._id}`;
-							}}
-							color='inherit'
-							variant='outlined'
-						>
-							Read more
-						</Button>
+					<Box
+						sx={{
+							display: 'flex',
+							alignItems: 'center',
+							gap: '10px',
+						}}
+					>
+						{Object.keys(currentUser).length > 0 && (
+							<Box>
+								{userFavorites.includes(post._id) ? (
+									<IconButton
+										onClick={handleFavoriteChange(
+											post._id,
+											'remove'
+										)}
+									>
+										<FavoriteIcon />
+									</IconButton>
+								) : (
+									<IconButton
+										onClick={handleFavoriteChange(
+											post._id,
+											'add'
+										)}
+									>
+										<FavoriteBorderIcon />
+									</IconButton>
+								)}
+							</Box>
+						)}
+						<Link to={`/post/${post._id}`}>
+							<Button variant='outlined'>Read more</Button>
+						</Link>
 					</Box>
 				</Box>
 			</Box>

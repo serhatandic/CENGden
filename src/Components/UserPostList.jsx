@@ -3,6 +3,7 @@ import Box from '@mui/material/Box';
 import { Button } from '@mui/material';
 import Typography from '@mui/material/Typography';
 import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 
 const bakcendIp = import.meta.env.VITE_BACKEND_IP;
 const backendPort = import.meta.env.VITE_BACKEND_PORT;
@@ -80,16 +81,14 @@ const UserPostList = ({ currentUser }) => {
 							</Button>
 						)}
 						<>
-							<Button
-								sx={{ marginLeft: '10px' }}
-								onClick={() => {
-									window.location.href = `/edit/${post._id}`;
-								}}
-								color='inherit'
-								variant='outlined'
-							>
-								Edit
-							</Button>
+							<Link to={`/item/${post._id}`}>
+								<Button
+									sx={{ marginLeft: '10px' }}
+									variant='outlined'
+								>
+									Edit
+								</Button>
+							</Link>
 							<Button
 								sx={{ marginLeft: '10px' }}
 								onClick={async () => {
@@ -98,7 +97,6 @@ const UserPostList = ({ currentUser }) => {
 									});
 									window.location.href = '/';
 								}}
-								color='inherit'
 								variant='outlined'
 							>
 								Delete

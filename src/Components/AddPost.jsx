@@ -20,8 +20,8 @@ const categories = {
 		'Transmission Type',
 		'Mileage',
 		'Price',
-		'Image',
 		'Description',
+		'Image',
 	],
 	Computers: [
 		'Title',
@@ -35,8 +35,8 @@ const categories = {
 		'Graphics Card',
 		'Operating System',
 		'Price',
-		'Image',
 		'Description',
+		'Image',
 	],
 	Phones: [
 		'Title',
@@ -50,8 +50,8 @@ const categories = {
 		'Camera Specifications',
 		'Battery Capacity',
 		'Price',
-		'Image',
 		'Description',
+		'Image',
 	],
 	'Private Lessons': [
 		'Title',
@@ -60,8 +60,8 @@ const categories = {
 		'Location',
 		'Duration',
 		'Price',
-		'Image',
 		'Description',
+		'Image',
 	],
 };
 
@@ -74,7 +74,7 @@ const AddPost = ({ userRole, currentUser }) => {
 		setCategory(category);
 		setPostData({}); // Reset form data when category changes
 	};
-
+	console.log(currentUser);
 	const handleChange = (e) => {
 		const { name, value } = e.target;
 
@@ -112,6 +112,7 @@ const AddPost = ({ userRole, currentUser }) => {
 					{},
 					{
 						Owner: currentUser.user_id,
+						OwnerName: currentUser.name,
 						createdAt: new Date(),
 						Category: category,
 						Status: 'active',
@@ -148,6 +149,11 @@ const AddPost = ({ userRole, currentUser }) => {
 							categories[category].map((field) => {
 								return (
 									<TextField
+										type={
+											field === 'Price'
+												? 'number'
+												: 'text'
+										}
 										key={field}
 										name={field}
 										label={field}

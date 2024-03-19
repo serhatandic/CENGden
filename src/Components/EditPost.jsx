@@ -82,7 +82,8 @@ const EditPost = ({ currentUser, allUsers }) => {
 	useEffect(() => {
 		fetch(`${url}/api/item/${id}`)
 			.then((res) => res.json())
-			.then((data) => {
+			.then((res) => {
+				const data = res['result'];
 				setPostData(data);
 				setPrevPrice(data.Price);
 				setCategory(data.Category);
@@ -136,6 +137,7 @@ const EditPost = ({ currentUser, allUsers }) => {
 					{},
 					{
 						Owner: currentUser.user_id,
+						OwnerName: currentUser.user_metadata.name,
 						createdAt: new Date(),
 						Category: category,
 						...postData,
@@ -175,6 +177,11 @@ const EditPost = ({ currentUser, allUsers }) => {
 							categories[category].map((field) => {
 								return (
 									<TextField
+										type={
+											field === 'Price'
+												? 'number'
+												: 'text'
+										}
 										key={field}
 										name={field}
 										label={field}
