@@ -14,6 +14,13 @@ TODO: provide all the endpoints
 
 TODO: phone number shouldn't be visible to the non-authenticated users
 
+Allowed urls for auth0 are:
+http://localhost:5173/,
+http://localhost:5174/,
+http://localhost:5175/,
+http://localhost:5176/
+These can be used for test purposes
+
 The project consists of 3 parts: Frontend, Backend server, Database.
 
 On the database part i have a single database with 4 collections. These collections are: "UserFavorites", "Items" and "FavoritedBy".

@@ -99,6 +99,16 @@ const AddPost = ({ userRole, currentUser }) => {
 				break;
 		}
 	};
+	const handleImageUpload = async (e) => {
+		// store the image as base64
+		const file = e.target.files[0];
+		const reader = new FileReader();
+		reader.onloadend = () => {
+			setPostData({ ...postData, Image: reader.result });
+		};
+		reader.readAsDataURL(file);
+	};
+
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 		// add post owner data
@@ -147,21 +157,32 @@ const AddPost = ({ userRole, currentUser }) => {
 						</Box>
 						{category &&
 							categories[category].map((field) => {
-								return (
-									<TextField
-										type={
-											field === 'Price'
-												? 'number'
-												: 'text'
-										}
-										key={field}
-										name={field}
-										label={field}
-										fullWidth
-										onChange={handleChange}
-										required
-									/>
-								);
+								if (field === 'Image') {
+									return (
+										<input
+											type='file'
+											key={field}
+											name={field}
+											label={field}
+											onChange={handleImageUpload}
+										/>
+									);
+								} else
+									return (
+										<TextField
+											type={
+												field === 'Price'
+													? 'number'
+													: 'text'
+											}
+											key={field}
+											name={field}
+											label={field}
+											fullWidth
+											onChange={handleChange}
+											required
+										/>
+									);
 							})}
 						<Button
 							type='submit'

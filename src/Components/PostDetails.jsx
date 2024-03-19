@@ -36,6 +36,9 @@ const PostDetails = ({ allUsers, currentUser }) => {
 			>
 				<Box
 					sx={{
+						width: {
+							md: '60vw',
+						},
 						display: 'flex',
 						flexDirection: 'column',
 						alignItems: 'center',
@@ -45,12 +48,12 @@ const PostDetails = ({ allUsers, currentUser }) => {
 						borderRadius: '8px',
 						backgroundColor: '#f9f9f9',
 						gap: '10px',
+						height: 'fit-content',
 					}}
 				>
 					<Box
 						sx={{
 							width: '100%',
-							height: '200px',
 							display: 'flex',
 							justifyContent: 'center',
 							alignItems: 'center',
@@ -58,7 +61,15 @@ const PostDetails = ({ allUsers, currentUser }) => {
 							borderRadius: '4px',
 						}}
 					>
-						image goes here
+						{postDetails?.Image ? (
+							<img
+								src={postDetails.Image}
+								alt='item'
+								style={{ maxWidth: '100%', maxHeight: '100%' }}
+							/>
+						) : (
+							'No image available'
+						)}
 					</Box>
 					<Box sx={{ mt: '10px', textAlign: 'center' }}>
 						Description: {postDetails?.Description}
@@ -79,6 +90,9 @@ const PostDetails = ({ allUsers, currentUser }) => {
 						display: 'flex',
 						flexDirection: 'column',
 						gap: '20px',
+						width: {
+							md: '40vw',
+						},
 					}}
 				>
 					<Box
@@ -96,9 +110,13 @@ const PostDetails = ({ allUsers, currentUser }) => {
 						>
 							Seller
 						</Typography>
+						<Typography variant='body1'>
+							{postDetails.OwnerName}
+						</Typography>
 						{allUsers.map((user) => {
+							console.log(user.user_id, postDetails.Owner);
 							if (
-								user.id === postDetails.UserId &&
+								user.user_id === postDetails.Owner &&
 								user.user_metadata
 							) {
 								return (
@@ -106,9 +124,6 @@ const PostDetails = ({ allUsers, currentUser }) => {
 										key={user.id}
 										style={{ marginBottom: '10px' }}
 									>
-										<Typography variant='body1'>
-											{user.user_metadata.name}
-										</Typography>
 										{currentUser?.user_id && (
 											<>
 												<Typography variant='body1'>
