@@ -37,7 +37,6 @@ const FavoriteList = ({ currentUser }) => {
 			}}
 		>
 			{userFavorites.map((post) => {
-				console.log(post);
 
 				if (post) {
 					return (

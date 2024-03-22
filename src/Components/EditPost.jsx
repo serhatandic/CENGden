@@ -1,7 +1,15 @@
 /* eslint-disable react/prop-types */
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { TextField, Button, Box } from '@mui/material';
+import {
+	TextField,
+	Button,
+	Box,
+	Select,
+	MenuItem,
+	InputLabel,
+	FormControl,
+} from '@mui/material';
 // import sgMail from '@sendgrid/mail';
 import sgMail from '@sendgrid/mail';
 
@@ -10,75 +18,69 @@ const backendPort = import.meta.env.VITE_BACKEND_PORT;
 const url = `${bakcendIp}:${backendPort}`;
 sgMail.setApiKey(import.meta.env.SENDGRID_API_KEY);
 
-const categories = {
-	Vehicles: [
-		'Title',
-		'Type',
-		'Brand',
-		'Model',
-		'Year',
-		'Color',
-		'Engine Displacement',
-		'Fuel Type',
-		'Transmission Type',
-		'Mileage',
-		'Price',
-		'Image',
-		'Description',
-		'Status',
-	],
-	Computers: [
-		'Title',
-		'Type',
-		'Brand',
-		'Model',
-		'Year',
-		'Processor',
-		'RAM',
-		'Storage',
-		'Graphics Card',
-		'Operating System',
-		'Price',
-		'Image',
-		'Description',
-		'Status',
-	],
-	Phones: [
-		'Title',
-		'Brand',
-		'Model',
-		'Year',
-		'Operating System',
-		'Processor',
-		'RAM',
-		'Storage',
-		'Camera Specifications',
-		'Battery Capacity',
-		'Price',
-		'Image',
-		'Description',
-		'Status',
-	],
-	'Private Lessons': [
-		'Title',
-		'Tutor Name',
-		'Lessons',
-		'Location',
-		'Duration',
-		'Price',
-		'Image',
-		'Description',
-		'Status',
-	],
-};
-
 const EditPost = ({ currentUser, allUsers }) => {
 	const { id } = useParams();
 	const [category, setCategory] = useState('Vehicles');
 	const [postData, setPostData] = useState({});
 	const [prevPrice, setPrevPrice] = useState(999999);
 	const [favoritedBy, setFavoritedBy] = useState([]);
-
+	const [categories, setCategories] = useState({
+		Vehicles: [
+			'Title',
+			'Price',
+			'Description',
+			'Type',
+			'Brand',
+			'Model',
+			'Year',
+			'Color',
+			'Engine Displacement',
+			'Fuel Type',
+			'Transmission Type',
+			'Mileage',
+			'Image',
+		],
+		Computers: [
+			'Title',
+			'Price',
+			'Description',
+			'Type',
+			'Brand',
+			'Model',
+			'Year',
+			'Processor',
+			'RAM',
+			'Storage',
+			'Graphics Card',
+			'Operating System',
+			'Image',
+		],
+		Phones: [
+			'Title',
+			'Price',
+			'Description',
+			'Brand',
+			'Model',
+			'Year',
+			'Operating System',
+			'Processor',
+			'RAM',
+			'Storage',
+			'Camera Specifications',
+			'Battery Capacity',
+			'Image',
+		],
+		'Private Lessons': [
+			'Title',
+			'Price',
+			'Description',
+			'Tutor Name',
+			'Lessons',
+			'Location',
+			'Duration',
+			'Image',
+		],
+	});
 	useEffect(() => {
 		fetch(`${url}/api/item/${id}`)
 			.then((res) => res.json())
@@ -181,41 +183,93 @@ const EditPost = ({ currentUser, allUsers }) => {
 							marginBottom: '5vh',
 						}}
 					>
-						{category &&
-							postData &&
-							postData.Attributes &&
-							categories[category].map((field) => {
-								if (field === 'Image') {
-									return (
-										<input
-											type='file'
-											key={field}
-											name={field}
-											label={field}
-											onChange={handleImageUpload}
-										/>
-									);
-								}
-								return (
-									<TextField
-										type={
-											field === 'Price'
-												? 'number'
-												: 'text'
-										}
-										key={field}
-										name={field}
-										label={field}
-										fullWidth
-										onChange={handleChange}
-										required
-										defaultValue={
-											postData[field] ||
-											postData.Attributes[field]
-										}
-									/>
-								);
-							})}
+						{category && postData && postData.Attributes ? (
+							<>
+								{categories[category].map((field) => {
+									if (field === 'Image') {
+										return (
+											<input
+												type='file'
+												key={field}
+												name={field}
+												label={field}
+												onChange={handleImageUpload}
+											/>
+										);
+									} else if (field === 'Status') {
+										return (
+											<FormControl key={field}>
+												<InputLabel id='demo-simple-select-label'>
+													Status
+												</InputLabel>
+												<Select
+													type='text'
+													key={field}
+													name={field}
+													label={field}
+													fullWidth
+													onChange={handleChange}
+													defaultValue={
+														postData[field]
+													}
+												>
+													<MenuItem value={'active'}>
+														active
+													</MenuItem>
+													<MenuItem
+														value={'inactive'}
+													>
+														inactive
+													</MenuItem>
+												</Select>
+											</FormControl>
+										);
+									} else
+										return (
+											<TextField
+												type={
+													field === 'Price'
+														? 'number'
+														: 'text'
+												}
+												key={field}
+												name={field}
+												label={field}
+												fullWidth
+												onChange={handleChange}
+												required={
+													field === 'Title' ||
+													field === 'Price' ||
+													field === 'Description' ||
+													field === 'Status'
+												}
+												defaultValue={
+													postData[field] ||
+													postData.Attributes[field]
+												}
+											/>
+										);
+								})}
+								<Button
+									variant='contained'
+									onClick={() => {
+										// prompt user to add new field
+										const newField = prompt(
+											'Enter the name of the new field'
+										);
+										setCategories({
+											...categories,
+											[category]: [
+												...categories[category],
+												newField,
+											],
+										});
+									}}
+								>
+									Add New Field
+								</Button>
+							</>
+						) : null}
 						<Button
 							type='submit'
 							variant='contained'

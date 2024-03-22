@@ -13,7 +13,6 @@ const Profile = ({ user }) => {
 	const [email, setEmail] = useState(user?.email);
 	const [name, setName] = useState(user?.user_metadata?.name);
 	const [phone, setPhone] = useState(user?.user_metadata?.phone_number);
-	console.log(user);
 	useEffect(() => {
 		setEmail(user?.email);
 		setName(user?.user_metadata?.name);

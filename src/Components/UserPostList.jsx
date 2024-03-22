@@ -81,7 +81,7 @@ const UserPostList = ({ currentUser }) => {
 							</Button>
 						)}
 						<>
-							<Link to={`/item/${post._id}`}>
+							<Link to={`/edit/${post._id}`}>
 								<Button
 									sx={{ marginLeft: '10px' }}
 									variant='outlined'

@@ -1,8 +1,9 @@
 /* eslint-disable react/prop-types */
 import Box from '@mui/material/Box';
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import Typography from '@mui/material/Typography';
+import Button from '@mui/material/Button';
 
 const bakcendIp = import.meta.env.VITE_BACKEND_IP;
 const backendPort = import.meta.env.VITE_BACKEND_PORT;
@@ -19,6 +20,7 @@ const PostDetails = ({ allUsers, currentUser }) => {
 		};
 		fetchPost();
 	}, [id]);
+
 	return (
 		postDetails &&
 		postDetails?.Attributes && (
@@ -61,15 +63,17 @@ const PostDetails = ({ allUsers, currentUser }) => {
 							borderRadius: '4px',
 						}}
 					>
-						{postDetails?.Image ? (
+						{
 							<img
-								src={postDetails.Image}
+								src={
+									postDetails?.Image
+										? postDetails.Image
+										: 'https://webmail.ceng.metu.edu.tr/images/ceng-logo.png'
+								}
 								alt='item'
 								style={{ maxWidth: '100%', maxHeight: '100%' }}
 							/>
-						) : (
-							'No image available'
-						)}
+						}
 					</Box>
 					<Box sx={{ mt: '10px', textAlign: 'center' }}>
 						Description: {postDetails?.Description}
@@ -82,6 +86,28 @@ const PostDetails = ({ allUsers, currentUser }) => {
 						}}
 					>
 						Price: {postDetails?.Price}
+					</Box>
+					<Box
+						sx={{
+							display: 'flex',
+							gap: '10px',
+							alignSelf: 'end',
+						}}
+					>
+						<Link to={`/edit/${id}`}>
+							<Button variant='contained'>Edit</Button>
+						</Link>
+						<Button
+							onClick={() => {
+								fetch(`${url}/api/item/${id}`, {
+									method: 'DELETE',
+								});
+								window.location.href = '/';
+							}}
+							variant='contained'
+						>
+							Delete
+						</Button>
 					</Box>
 				</Box>
 
@@ -114,7 +140,6 @@ const PostDetails = ({ allUsers, currentUser }) => {
 							{postDetails.OwnerName}
 						</Typography>
 						{allUsers.map((user) => {
-							console.log(user.user_id, postDetails.Owner);
 							if (
 								user.user_id === postDetails.Owner &&
 								user.user_metadata

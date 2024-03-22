@@ -7,64 +7,6 @@ const bakcendIp = import.meta.env.VITE_BACKEND_IP;
 const backendPort = import.meta.env.VITE_BACKEND_PORT;
 const url = `${bakcendIp}:${backendPort}`;
 
-const categories = {
-	Vehicles: [
-		'Title',
-		'Type',
-		'Brand',
-		'Model',
-		'Year',
-		'Color',
-		'Engine Displacement',
-		'Fuel Type',
-		'Transmission Type',
-		'Mileage',
-		'Price',
-		'Description',
-		'Image',
-	],
-	Computers: [
-		'Title',
-		'Type',
-		'Brand',
-		'Model',
-		'Year',
-		'Processor',
-		'RAM',
-		'Storage',
-		'Graphics Card',
-		'Operating System',
-		'Price',
-		'Description',
-		'Image',
-	],
-	Phones: [
-		'Title',
-		'Brand',
-		'Model',
-		'Year',
-		'Operating System',
-		'Processor',
-		'RAM',
-		'Storage',
-		'Camera Specifications',
-		'Battery Capacity',
-		'Price',
-		'Description',
-		'Image',
-	],
-	'Private Lessons': [
-		'Title',
-		'Tutor Name',
-		'Lessons',
-		'Location',
-		'Duration',
-		'Price',
-		'Description',
-		'Image',
-	],
-};
-
 const AddPost = ({ userRole, currentUser }) => {
 	const [category, setCategory] = useState('');
 	const [postData, setPostData] = useState({
@@ -74,7 +16,64 @@ const AddPost = ({ userRole, currentUser }) => {
 		setCategory(category);
 		setPostData({}); // Reset form data when category changes
 	};
-	console.log(currentUser);
+	const [categories, setCategories] = useState({
+		Vehicles: [
+			'Title',
+			'Price',
+			'Description',
+			'Type',
+			'Brand',
+			'Model',
+			'Year',
+			'Color',
+			'Engine Displacement',
+			'Fuel Type',
+			'Transmission Type',
+			'Mileage',
+			'Image',
+		],
+		Computers: [
+			'Title',
+			'Price',
+			'Description',
+			'Type',
+			'Brand',
+			'Model',
+			'Year',
+			'Processor',
+			'RAM',
+			'Storage',
+			'Graphics Card',
+			'Operating System',
+			'Image',
+		],
+		Phones: [
+			'Title',
+			'Price',
+			'Description',
+			'Brand',
+			'Model',
+			'Year',
+			'Operating System',
+			'Processor',
+			'RAM',
+			'Storage',
+			'Camera Specifications',
+			'Battery Capacity',
+			'Image',
+		],
+		'Private Lessons': [
+			'Title',
+			'Price',
+			'Description',
+			'Tutor Name',
+			'Lessons',
+			'Location',
+			'Duration',
+			'Image',
+		],
+	});
+
 	const handleChange = (e) => {
 		const { name, value } = e.target;
 
@@ -155,42 +154,70 @@ const AddPost = ({ userRole, currentUser }) => {
 								handleCategoryChange={handleCategoryChange}
 							/>
 						</Box>
-						{category &&
-							categories[category].map((field) => {
-								if (field === 'Image') {
-									return (
-										<input
-											type='file'
-											key={field}
-											name={field}
-											label={field}
-											onChange={handleImageUpload}
-										/>
-									);
-								} else
-									return (
-										<TextField
-											type={
-												field === 'Price'
-													? 'number'
-													: 'text'
-											}
-											key={field}
-											name={field}
-											label={field}
-											fullWidth
-											onChange={handleChange}
-											required
-										/>
-									);
-							})}
-						<Button
-							type='submit'
-							variant='contained'
-							color='primary'
-						>
-							Submit
-						</Button>
+						{category ? (
+							<>
+								{categories[category].map((field) => {
+									if (field === 'Image') {
+										return (
+											<input
+												type='file'
+												key={field}
+												name={field}
+												label={field}
+												onChange={handleImageUpload}
+											/>
+										);
+									} else
+										return (
+											<TextField
+												type={
+													field === 'Price'
+														? 'number'
+														: 'text'
+												}
+												key={field}
+												name={field}
+												label={field}
+												fullWidth
+												onChange={handleChange}
+												required={
+													field === 'Title' ||
+													field === 'Price' ||
+													field === 'Description' ||
+													field === 'Status'
+												}
+											/>
+										);
+								})}
+								<Button
+									variant='contained'
+									onClick={() => {
+										// prompt user to add new field
+										const newField = prompt(
+											'Enter the name of the new field'
+										);
+										setCategories({
+											...categories,
+											[category]: [
+												...categories[category],
+												newField,
+											],
+										});
+									}}
+								>
+									Add New Field
+								</Button>
+							</>
+						) : null}
+						{category ? (
+							<Button
+								type='submit'
+								variant='contained'
+								color='primary'
+							>
+								Submit
+							</Button>
+						) : null}
 					</Box>
 				</form>
 			)}
