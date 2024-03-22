@@ -1,3 +1,4 @@
+/* eslint-disable no-mixed-spaces-and-tabs */
 /* eslint-disable react/prop-types */
 import Box from '@mui/material/Box';
 import { useEffect, useState } from 'react';
@@ -12,6 +13,7 @@ const url = `${bakcendIp}:${backendPort}`;
 const PostDetails = ({ allUsers, currentUser }) => {
 	const { id } = useParams();
 	const [postDetails, setPostDetails] = useState({});
+	console.log(currentUser,postDetails);
 	useEffect(() => {
 		const fetchPost = async () => {
 			const response = await fetch(`${url}/api/item/${id}`);
@@ -87,28 +89,31 @@ const PostDetails = ({ allUsers, currentUser }) => {
 					>
 						Price: {postDetails?.Price}
 					</Box>
-					<Box
-						sx={{
-							display: 'flex',
-							gap: '10px',
-							alignSelf: 'end',
-						}}
-					>
-						<Link to={`/edit/${id}`}>
-							<Button variant='contained'>Edit</Button>
-						</Link>
-						<Button
-							onClick={() => {
-								fetch(`${url}/api/item/${id}`, {
-									method: 'DELETE',
-								});
-								window.location.href = '/';
+					{currentUser.user_metadata?.name ===
+						postDetails.OwnerName && (
+						<Box
+							sx={{
+								display: 'flex',
+								gap: '10px',
+								alignSelf: 'end',
 							}}
-							variant='contained'
 						>
-							Delete
-						</Button>
-					</Box>
+							<Link to={`/edit/${id}`}>
+								<Button variant='contained'>Edit</Button>
+							</Link>
+							<Button
+								onClick={() => {
+									fetch(`${url}/api/item/${id}`, {
+										method: 'DELETE',
+									});
+									window.location.href = '/';
+								}}
+								variant='contained'
+							>
+								Delete
+							</Button>
+						</Box>
+					)}
 				</Box>
 
 				<Box
@@ -207,7 +212,81 @@ const PostDetails = ({ allUsers, currentUser }) => {
 												padding: '8px',
 											}}
 										>
-											{postDetails.Attributes[key]}
+											{/*postdetails.Attributes[key] might be another object
+												in that case recursively render the object to the end of its depth*/}
+											{typeof postDetails.Attributes[
+												key
+											] === 'object'
+												? Object.keys(
+														postDetails.Attributes[
+															key
+														]
+												  ).map((subKey) => (
+														<table
+															key={subKey}
+															style={{
+																border: '1px solid #ddd',
+																borderCollapse:
+																	'collapse',
+																width: '100%',
+																marginBottom:
+																	'10px',
+																marginLeft:
+																	'auto',
+																marginRight:
+																	'auto',
+																backgroundColor:
+																	'#fafafa',
+																boxShadow:
+																	'0 2px 4px rgba(0, 0, 0, 0.05)',
+															}}
+														>
+															<thead>
+																<tr
+																	style={{
+																		backgroundColor:
+																			'#f0f0f0',
+																	}}
+																>
+																	<th
+																		style={{
+																			textAlign:
+																				'left',
+																			padding:
+																				'8px',
+																		}}
+																	>
+																		{subKey[0].toUpperCase() +
+																			subKey.slice(
+																				1
+																			)}
+																	</th>
+																</tr>
+															</thead>
+															<tbody>
+																<tr>
+																	<td
+																		style={{
+																			textAlign:
+																				'left',
+																			padding:
+																				'8px',
+																		}}
+																	>
+																		{
+																			postDetails
+																				.Attributes[
+																				key
+																			][
+																				subKey
+																			]
+																		}
+																	</td>
+																</tr>
+															</tbody>
+														</table>
+												  ))
+												: postDetails.Attributes[key]}
 										</td>
 									</tr>
 								</tbody>

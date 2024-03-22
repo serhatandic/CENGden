@@ -10,13 +10,10 @@ import {
 	InputLabel,
 	FormControl,
 } from '@mui/material';
-// import sgMail from '@sendgrid/mail';
-import sgMail from '@sendgrid/mail';
-
+import MultiFieldInput from './MultiFieldInput';
 const bakcendIp = import.meta.env.VITE_BACKEND_IP;
 const backendPort = import.meta.env.VITE_BACKEND_PORT;
 const url = `${bakcendIp}:${backendPort}`;
-sgMail.setApiKey(import.meta.env.SENDGRID_API_KEY);
 
 const EditPost = ({ currentUser, allUsers }) => {
 	const { id } = useParams();
@@ -39,6 +36,7 @@ const EditPost = ({ currentUser, allUsers }) => {
 			'Transmission Type',
 			'Mileage',
 			'Image',
+			'Status',
 		],
 		Computers: [
 			'Title',
@@ -54,6 +52,7 @@ const EditPost = ({ currentUser, allUsers }) => {
 			'Graphics Card',
 			'Operating System',
 			'Image',
+			'Status',
 		],
 		Phones: [
 			'Title',
@@ -69,6 +68,7 @@ const EditPost = ({ currentUser, allUsers }) => {
 			'Camera Specifications',
 			'Battery Capacity',
 			'Image',
+			'Status',
 		],
 		'Private Lessons': [
 			'Title',
@@ -79,6 +79,7 @@ const EditPost = ({ currentUser, allUsers }) => {
 			'Location',
 			'Duration',
 			'Image',
+			'Status',
 		],
 	});
 	useEffect(() => {
@@ -186,6 +187,23 @@ const EditPost = ({ currentUser, allUsers }) => {
 						{category && postData && postData.Attributes ? (
 							<>
 								{categories[category].map((field) => {
+									// the category might have sub fields, recursively render them
+									if (
+										typeof postData.Attributes[field] ===
+										'object'
+									) {
+										return (
+											<MultiFieldInput
+												key={field}
+												field={field}
+												setPostData={setPostData}
+												attributeTree={
+													postData.Attributes[field]
+												}
+												isEdit={true}
+											/>
+										);
+									}
 									if (field === 'Image') {
 										return (
 											<input

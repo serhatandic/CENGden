@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import { TextField, Button, Box } from '@mui/material';
 import CategorySelector from './CategorySelector';
+import MultiFieldInput from './MultiFieldInput';
 
 const bakcendIp = import.meta.env.VITE_BACKEND_IP;
 const backendPort = import.meta.env.VITE_BACKEND_PORT;
@@ -9,9 +10,11 @@ const url = `${bakcendIp}:${backendPort}`;
 
 const AddPost = ({ userRole, currentUser }) => {
 	const [category, setCategory] = useState('');
+	const [multiDictionary, setMultiDictionary] = useState({});
 	const [postData, setPostData] = useState({
 		Owner: currentUser.user_id,
 	});
+	console.log(postData);
 	const handleCategoryChange = (category) => {
 		setCategory(category);
 		setPostData({}); // Reset form data when category changes
@@ -169,24 +172,80 @@ const AddPost = ({ userRole, currentUser }) => {
 										);
 									} else
 										return (
-											<TextField
-												type={
-													field === 'Price'
-														? 'number'
-														: 'text'
-												}
+											<Box
 												key={field}
-												name={field}
-												label={field}
-												fullWidth
-												onChange={handleChange}
-												required={
+												sx={{
+													display: 'flex',
+													gap: '10px',
+												}}
+											>
+												{!(
 													field === 'Title' ||
 													field === 'Price' ||
 													field === 'Description' ||
 													field === 'Status'
-												}
-											/>
+												) ? (
+													<Box
+														sx={{
+															display: 'flex',
+															flexDirection:
+																'column',
+														}}
+													>
+														<label htmlFor={field}>
+															Multi
+														</label>
+														<input
+															onChange={(e) => {
+																setMultiDictionary(
+																	{
+																		...multiDictionary,
+																		[field]:
+																			e
+																				.target
+																				.checked
+																				? 'multi'
+																				: 'single',
+																	}
+																);
+															}}
+															type='checkbox'
+															id={field}
+														/>
+													</Box>
+												) : null}
+												{multiDictionary[field] ===
+												'multi' ? (
+													<MultiFieldInput
+														field={field}
+														setPostData={
+															setPostData
+														}
+														postData={postData}
+														isEdit={false}
+													/>
+												) : (
+													<TextField
+														type={
+															field === 'Price'
+																? 'number'
+																: 'text'
+														}
+														key={field}
+														name={field}
+														label={field}
+														fullWidth
+														onChange={handleChange}
+														required={
+															field === 'Title' ||
+															field === 'Price' ||
+															field ===
+																'Description' ||
+															field === 'Status'
+														}
+													/>
+												)}
+											</Box>
 										);
 								})}
 								<Button
