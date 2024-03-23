@@ -7,7 +7,6 @@ import { useState } from 'react';
 
 const MultiFieldInput = ({ field, setPostData, attributeTree, isEdit }) => {
 	const [newFields, setNewFields] = useState([]);
-
 	return (
 		<Box
 			sx={{
@@ -17,7 +16,7 @@ const MultiFieldInput = ({ field, setPostData, attributeTree, isEdit }) => {
 				flexDirection: 'column',
 			}}
 		>
-			{isEdit ? (
+			{isEdit && attributeTree ? (
 				<>
 					<Typography variant='h5' style={{ marginBottom: '10px' }}>
 						Attribute: {field}
@@ -28,11 +27,14 @@ const MultiFieldInput = ({ field, setPostData, attributeTree, isEdit }) => {
 								key={key}
 								name={key}
 								label={key}
+								defaultValue={attributeTree[key]}
 								onChange={(e) => {
 									setPostData((prev) => {
+										console.log(prev.Attributes);
 										return {
 											...prev,
 											Attributes: {
+												...prev?.['Attributes'],
 												[field]: {
 													...prev?.['Attributes']?.[
 														field
@@ -53,13 +55,14 @@ const MultiFieldInput = ({ field, setPostData, attributeTree, isEdit }) => {
 								const fieldName = prompt(
 									'Enter the field name'
 								);
-                                if (fieldName === null) return;
+								if (fieldName === null) return;
 								setNewFields([...newFields, fieldName]);
 								// trigger attributeTree update
 								setPostData((prev) => {
 									return {
 										...prev,
 										Attributes: {
+											...prev?.['Attributes'],
 											[field]: {
 												...prev?.['Attributes']?.[
 													field
@@ -107,6 +110,7 @@ const MultiFieldInput = ({ field, setPostData, attributeTree, isEdit }) => {
 									return {
 										...prev,
 										Attributes: {
+											...prev?.['Attributes'],
 											[field]: {
 												...prev?.['Attributes']?.[
 													field

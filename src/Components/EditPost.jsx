@@ -2,15 +2,14 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import {
-	TextField,
 	Button,
 	Box,
-	Select,
-	MenuItem,
-	InputLabel,
 	FormControl,
+	MenuItem,
+	Select,
+	InputLabel,
 } from '@mui/material';
-import MultiFieldInput from './MultiFieldInput';
+import TextFieldWrapper from './TextFieldWrapper';
 const bakcendIp = import.meta.env.VITE_BACKEND_IP;
 const backendPort = import.meta.env.VITE_BACKEND_PORT;
 const url = `${bakcendIp}:${backendPort}`;
@@ -18,6 +17,7 @@ const url = `${bakcendIp}:${backendPort}`;
 const EditPost = ({ currentUser, allUsers }) => {
 	const { id } = useParams();
 	const [category, setCategory] = useState('Vehicles');
+	const [multiDictionary, setMultiDictionary] = useState({});
 	const [postData, setPostData] = useState({});
 	const [prevPrice, setPrevPrice] = useState(999999);
 	const [favoritedBy, setFavoritedBy] = useState([]);
@@ -98,7 +98,6 @@ const EditPost = ({ currentUser, allUsers }) => {
 				setFavoritedBy(data);
 			});
 	}, [id, currentUser]);
-
 	const handleChange = (e) => {
 		const { name, value } = e.target;
 
@@ -121,7 +120,7 @@ const EditPost = ({ currentUser, allUsers }) => {
 			default:
 				setPostData({
 					...postData,
-					Attributes: { ...postData.Attributes, [name]: value },
+					Attributes: { ...postData?.Attributes, [name]: value },
 				});
 				break;
 		}
@@ -184,26 +183,9 @@ const EditPost = ({ currentUser, allUsers }) => {
 							marginBottom: '5vh',
 						}}
 					>
-						{category && postData && postData.Attributes ? (
+						{category && postData ? (
 							<>
 								{categories[category].map((field) => {
-									// the category might have sub fields, recursively render them
-									if (
-										typeof postData.Attributes[field] ===
-										'object'
-									) {
-										return (
-											<MultiFieldInput
-												key={field}
-												field={field}
-												setPostData={setPostData}
-												attributeTree={
-													postData.Attributes[field]
-												}
-												isEdit={true}
-											/>
-										);
-									}
 									if (field === 'Image') {
 										return (
 											<input
@@ -214,9 +196,12 @@ const EditPost = ({ currentUser, allUsers }) => {
 												onChange={handleImageUpload}
 											/>
 										);
-									} else if (field === 'Status') {
+									} else if (
+										field === 'Status' &&
+										postData['Status']
+									) {
 										return (
-											<FormControl key={field}>
+											<FormControl key={Math.random()}>
 												<InputLabel id='demo-simple-select-label'>
 													Status
 												</InputLabel>
@@ -228,7 +213,7 @@ const EditPost = ({ currentUser, allUsers }) => {
 													fullWidth
 													onChange={handleChange}
 													defaultValue={
-														postData[field]
+														postData['Status']
 													}
 												>
 													<MenuItem value={'active'}>
@@ -242,31 +227,23 @@ const EditPost = ({ currentUser, allUsers }) => {
 												</Select>
 											</FormControl>
 										);
-									} else
+									} else {
 										return (
-											<TextField
-												type={
-													field === 'Price'
-														? 'number'
-														: 'text'
-												}
+											<TextFieldWrapper
 												key={field}
-												name={field}
-												label={field}
-												fullWidth
-												onChange={handleChange}
-												required={
-													field === 'Title' ||
-													field === 'Price' ||
-													field === 'Description' ||
-													field === 'Status'
+												field={field}
+												setPostData={setPostData}
+												postData={postData}
+												handleChange={handleChange}
+												multiDictionary={
+													multiDictionary
 												}
-												defaultValue={
-													postData[field] ||
-													postData.Attributes[field]
+												setMultiDictionary={
+													setMultiDictionary
 												}
 											/>
 										);
+									}
 								})}
 								<Button
 									variant='contained'

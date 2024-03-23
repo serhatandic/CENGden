@@ -1,8 +1,8 @@
 /* eslint-disable react/prop-types */
 import { useState } from 'react';
-import { TextField, Button, Box } from '@mui/material';
+import { Button, Box } from '@mui/material';
 import CategorySelector from './CategorySelector';
-import MultiFieldInput from './MultiFieldInput';
+import TextFieldWrapper from './TextFieldWrapper';
 
 const bakcendIp = import.meta.env.VITE_BACKEND_IP;
 const backendPort = import.meta.env.VITE_BACKEND_PORT;
@@ -14,7 +14,6 @@ const AddPost = ({ userRole, currentUser }) => {
 	const [postData, setPostData] = useState({
 		Owner: currentUser.user_id,
 	});
-	console.log(postData);
 	const handleCategoryChange = (category) => {
 		setCategory(category);
 		setPostData({}); // Reset form data when category changes
@@ -124,7 +123,7 @@ const AddPost = ({ userRole, currentUser }) => {
 					{},
 					{
 						Owner: currentUser.user_id,
-						OwnerName: currentUser.name,
+						OwnerName: currentUser.user_metadata.name,
 						createdAt: new Date(),
 						Category: category,
 						Status: 'active',
@@ -172,80 +171,19 @@ const AddPost = ({ userRole, currentUser }) => {
 										);
 									} else
 										return (
-											<Box
+											<TextFieldWrapper
 												key={field}
-												sx={{
-													display: 'flex',
-													gap: '10px',
-												}}
-											>
-												{!(
-													field === 'Title' ||
-													field === 'Price' ||
-													field === 'Description' ||
-													field === 'Status'
-												) ? (
-													<Box
-														sx={{
-															display: 'flex',
-															flexDirection:
-																'column',
-														}}
-													>
-														<label htmlFor={field}>
-															Multi
-														</label>
-														<input
-															onChange={(e) => {
-																setMultiDictionary(
-																	{
-																		...multiDictionary,
-																		[field]:
-																			e
-																				.target
-																				.checked
-																				? 'multi'
-																				: 'single',
-																	}
-																);
-															}}
-															type='checkbox'
-															id={field}
-														/>
-													</Box>
-												) : null}
-												{multiDictionary[field] ===
-												'multi' ? (
-													<MultiFieldInput
-														field={field}
-														setPostData={
-															setPostData
-														}
-														postData={postData}
-														isEdit={false}
-													/>
-												) : (
-													<TextField
-														type={
-															field === 'Price'
-																? 'number'
-																: 'text'
-														}
-														key={field}
-														name={field}
-														label={field}
-														fullWidth
-														onChange={handleChange}
-														required={
-															field === 'Title' ||
-															field === 'Price' ||
-															field ===
-																'Description' ||
-															field === 'Status'
-														}
-													/>
-												)}
-											</Box>
+												field={field}
+												handleChange={handleChange}
+												setPostData={setPostData}
+												setMultiDictionary={
+													setMultiDictionary
+												}
+												multiDictionary={
+													multiDictionary
+												}
+												postData={postData}
+											/>
 										);
 								})}
 								<Button

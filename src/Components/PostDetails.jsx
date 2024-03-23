@@ -13,7 +13,6 @@ const url = `${bakcendIp}:${backendPort}`;
 const PostDetails = ({ allUsers, currentUser }) => {
 	const { id } = useParams();
 	const [postDetails, setPostDetails] = useState({});
-	console.log(currentUser,postDetails);
 	useEffect(() => {
 		const fetchPost = async () => {
 			const response = await fetch(`${url}/api/item/${id}`);
@@ -24,8 +23,7 @@ const PostDetails = ({ allUsers, currentUser }) => {
 	}, [id]);
 
 	return (
-		postDetails &&
-		postDetails?.Attributes && (
+		postDetails && (
 			<Box
 				sx={{
 					display: 'flex',
@@ -127,6 +125,7 @@ const PostDetails = ({ allUsers, currentUser }) => {
 					}}
 				>
 					<Box
+						key={postDetails.Owner}
 						style={{
 							padding: '20px',
 							boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
@@ -173,126 +172,133 @@ const PostDetails = ({ allUsers, currentUser }) => {
 							return null;
 						})}
 					</Box>
-
-					<Box>
-						{Object.keys(postDetails.Attributes).map((key) => (
-							<table
-								key={key}
-								style={{
-									border: '1px solid #ddd',
-									borderCollapse: 'collapse',
-									width: '100%',
-									marginBottom: '10px',
-									marginLeft: 'auto',
-									marginRight: 'auto',
-									backgroundColor: '#fafafa',
-									boxShadow: '0 2px 4px rgba(0, 0, 0, 0.05)',
-								}}
-							>
-								<thead>
-									<tr style={{ backgroundColor: '#f0f0f0' }}>
-										{' '}
-										{/* Header background */}
-										<th
+					{postDetails?.Attributes && (
+						<Box>
+							{Object.keys(postDetails.Attributes).map((key) => (
+								<table
+									key={key}
+									style={{
+										border: '1px solid #ddd',
+										borderCollapse: 'collapse',
+										width: '100%',
+										marginBottom: '10px',
+										marginLeft: 'auto',
+										marginRight: 'auto',
+										backgroundColor: '#fafafa',
+										boxShadow:
+											'0 2px 4px rgba(0, 0, 0, 0.05)',
+									}}
+								>
+									<thead>
+										<tr
 											style={{
-												textAlign: 'left',
-												padding: '8px',
+												backgroundColor: '#f0f0f0',
 											}}
 										>
-											{key[0].toUpperCase() +
-												key.slice(1)}
-										</th>
-									</tr>
-								</thead>
-								<tbody>
-									<tr>
-										<td
-											style={{
-												textAlign: 'left',
-												padding: '8px',
-											}}
-										>
-											{/*postdetails.Attributes[key] might be another object
+											{' '}
+											{/* Header background */}
+											<th
+												style={{
+													textAlign: 'left',
+													padding: '8px',
+												}}
+											>
+												{key[0].toUpperCase() +
+													key.slice(1)}
+											</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<td
+												style={{
+													textAlign: 'left',
+													padding: '8px',
+												}}
+											>
+												{/*postdetails.Attributes[key] might be another object
 												in that case recursively render the object to the end of its depth*/}
-											{typeof postDetails.Attributes[
-												key
-											] === 'object'
-												? Object.keys(
-														postDetails.Attributes[
+												{typeof postDetails.Attributes[
+													key
+												] === 'object'
+													? Object.keys(
+															postDetails
+																.Attributes[key]
+													  ).map((subKey) => (
+															<table
+																key={subKey}
+																style={{
+																	border: '1px solid #ddd',
+																	borderCollapse:
+																		'collapse',
+																	width: '100%',
+																	marginBottom:
+																		'10px',
+																	marginLeft:
+																		'auto',
+																	marginRight:
+																		'auto',
+																	backgroundColor:
+																		'#fafafa',
+																	boxShadow:
+																		'0 2px 4px rgba(0, 0, 0, 0.05)',
+																}}
+															>
+																<thead>
+																	<tr
+																		style={{
+																			backgroundColor:
+																				'#f0f0f0',
+																		}}
+																	>
+																		<th
+																			style={{
+																				textAlign:
+																					'left',
+																				padding:
+																					'8px',
+																			}}
+																		>
+																			{subKey[0].toUpperCase() +
+																				subKey.slice(
+																					1
+																				)}
+																		</th>
+																	</tr>
+																</thead>
+																<tbody>
+																	<tr>
+																		<td
+																			style={{
+																				textAlign:
+																					'left',
+																				padding:
+																					'8px',
+																			}}
+																		>
+																			{
+																				postDetails
+																					.Attributes[
+																					key
+																				][
+																					subKey
+																				]
+																			}
+																		</td>
+																	</tr>
+																</tbody>
+															</table>
+													  ))
+													: postDetails.Attributes[
 															key
-														]
-												  ).map((subKey) => (
-														<table
-															key={subKey}
-															style={{
-																border: '1px solid #ddd',
-																borderCollapse:
-																	'collapse',
-																width: '100%',
-																marginBottom:
-																	'10px',
-																marginLeft:
-																	'auto',
-																marginRight:
-																	'auto',
-																backgroundColor:
-																	'#fafafa',
-																boxShadow:
-																	'0 2px 4px rgba(0, 0, 0, 0.05)',
-															}}
-														>
-															<thead>
-																<tr
-																	style={{
-																		backgroundColor:
-																			'#f0f0f0',
-																	}}
-																>
-																	<th
-																		style={{
-																			textAlign:
-																				'left',
-																			padding:
-																				'8px',
-																		}}
-																	>
-																		{subKey[0].toUpperCase() +
-																			subKey.slice(
-																				1
-																			)}
-																	</th>
-																</tr>
-															</thead>
-															<tbody>
-																<tr>
-																	<td
-																		style={{
-																			textAlign:
-																				'left',
-																			padding:
-																				'8px',
-																		}}
-																	>
-																		{
-																			postDetails
-																				.Attributes[
-																				key
-																			][
-																				subKey
-																			]
-																		}
-																	</td>
-																</tr>
-															</tbody>
-														</table>
-												  ))
-												: postDetails.Attributes[key]}
-										</td>
-									</tr>
-								</tbody>
-							</table>
-						))}
-					</Box>
+													  ]}
+											</td>
+										</tr>
+									</tbody>
+								</table>
+							))}
+						</Box>
+					)}
 				</Box>
 			</Box>
 		)
