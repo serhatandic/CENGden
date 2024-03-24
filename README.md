@@ -1,25 +1,6 @@
 I set the authentication token at 14.04.2024, it has 30 days till expiration, if it expires it may cause error related to authentication. I will try to update it throughout the semester but in case you encounter errors related to authentication it would be great if you reached me before giving the final grade.
 
-TODO: provide 1 admin user, 1 normal user account credentials so that assistant can test
 
-TODO: explain each component, what they do etc.
-
-TODO: hrefs can be fixed but not too important
-
-TODO: some fields in some views are not visible, that should be fixed
-
-TODO: test the app
-
-TODO: provide all the endpoints
-
-TODO: phone number shouldn't be visible to the non-authenticated users
-
-Allowed urls for auth0 are:
-http://localhost:5173/,
-http://localhost:5174/,
-http://localhost:5175/,
-http://localhost:5176/
-These can be used for test purposes
 
 The project consists of 3 parts: Frontend, Backend server, Database.
 

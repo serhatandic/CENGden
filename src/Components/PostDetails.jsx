@@ -18,8 +18,9 @@ const PostDetails = ({ allUsers, currentUser }) => {
 	const [postDetails, setPostDetails] = useState({});
 	const [isProfilePublic, setIsProfilePublic] = useState(false);
 	const [adminUsers, setAdminUsers] = useState([]);
+	const [loading, setLoading] = useState(true);
 
-	const isUserAdmin = adminUsers.some(
+	const isUserAdmin = adminUsers?.some(
 		(user) => user.user_id === currentUser.user_id
 	);
 	useEffect(() => {
@@ -62,6 +63,7 @@ const PostDetails = ({ allUsers, currentUser }) => {
 			const response = await fetch(`${url}/api/item/${id}`);
 			const data = await response.json();
 			setPostDetails(data['result']);
+			setLoading(false);
 		};
 		fetchPost();
 	}, [id]);
@@ -89,7 +91,9 @@ const PostDetails = ({ allUsers, currentUser }) => {
 			})
 			.catch((error) => console.log('error', error));
 	};
-	if (!postDetails || !currentUser) return null;
+	if (loading) {
+		return <div>Loading...</div>;
+	}
 	return (
 		postDetails && (
 			<Box
