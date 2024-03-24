@@ -89,6 +89,7 @@ const PostDetails = ({ allUsers, currentUser }) => {
 			})
 			.catch((error) => console.log('error', error));
 	};
+	if (!postDetails || !currentUser) return null;
 	return (
 		postDetails && (
 			<Box
