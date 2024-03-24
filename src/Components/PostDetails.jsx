@@ -21,7 +21,6 @@ const PostDetails = ({ allUsers, currentUser }) => {
 	const isUserAdmin = adminUsers.some(
 		(user) => user.user_id === currentUser.user_id
 	);
-	console.log(postDetails);
 	useEffect(() => {
 		var myHeaders = new Headers();
 		myHeaders.append('Accept', 'application/json');
@@ -53,7 +52,6 @@ const PostDetails = ({ allUsers, currentUser }) => {
 			);
 			const data = await response.json();
 			setIsProfilePublic(data);
-			console.log(data);
 		};
 		fetchIsPublic();
 	}, [postDetails?.Owner]);
