@@ -11,7 +11,7 @@ const auth0domain = import.meta.env.VITE_AUTH0_DOMAIN;
 const auth0token = import.meta.env.VITE_AUTH0_TOKEN;
 
 const bakcendIp = import.meta.env.VITE_BACKEND_IP;
-const backendPort = import.meta.env.VITE_BACKEND_PORT;
+// const backendPort = import.meta.env.VITE_BACKEND_PORT;
 
 const Profile = ({ user }) => {
 	const [editMode, setEditMode] = useState(false);
@@ -23,7 +23,7 @@ const Profile = ({ user }) => {
 	useEffect(() => {
 		const fetchIsPublic = async () => {
 			const response = await fetch(
-				`${bakcendIp}:${backendPort}/api/user/${user.user_id}/isPublic`
+				`${bakcendIp}/api/user/${user.user_id}/isPublic`
 			);
 			const data = await response.json();
 			setShareContact(data);
@@ -58,7 +58,7 @@ const Profile = ({ user }) => {
 			body: JSON.stringify(data), // Convert the JavaScript object to a JSON string
 		});
 
-		const url2 = `${bakcendIp}:${backendPort}`;
+		const url2 = `${bakcendIp}`;
 		await fetch(`${url2}/api/user/${user.user_id}/isPublic`, {
 			method: 'POST',
 			headers: {

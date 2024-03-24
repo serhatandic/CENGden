@@ -11,8 +11,8 @@ import {
 } from '@mui/material';
 import TextFieldWrapper from './TextFieldWrapper';
 const bakcendIp = import.meta.env.VITE_BACKEND_IP;
-const backendPort = import.meta.env.VITE_BACKEND_PORT;
-const url = `${bakcendIp}:${backendPort}`;
+// const backendPort = import.meta.env.VITE_BACKEND_PORT;
+const url = `${bakcendIp}`;
 
 const EditPost = ({ currentUser, allUsers }) => {
 	const { id } = useParams();

@@ -7,8 +7,9 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 
 const bakcendIp = import.meta.env.VITE_BACKEND_IP;
-const backendPort = import.meta.env.VITE_BACKEND_PORT;
-const url = `${bakcendIp}:${backendPort}`;
+// const backendPort = import.meta.env.VITE_BACKEND_PORT;
+const url = `${bakcendIp}`;
+
 const auth0token = import.meta.env.VITE_AUTH0_TOKEN;
 const auth0domain = import.meta.env.VITE_AUTH0_DOMAIN;
 

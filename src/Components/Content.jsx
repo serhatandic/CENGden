@@ -6,8 +6,8 @@ import Pagination from '@mui/material/Pagination';
 import CategorySelector from './CategorySelector';
 
 const bakcendIp = import.meta.env.VITE_BACKEND_IP;
-const backendPort = import.meta.env.VITE_BACKEND_PORT;
-const url = `${bakcendIp}:${backendPort}`;
+// const backendPort = import.meta.env.VITE_BACKEND_PORT;
+const url = `${bakcendIp}`;
 
 const Content = ({ userRole, currentUser }) => {
 	const [items, setItems] = useState([]);

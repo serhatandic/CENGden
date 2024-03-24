@@ -6,8 +6,8 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 const bakcendIp = import.meta.env.VITE_BACKEND_IP;
-const backendPort = import.meta.env.VITE_BACKEND_PORT;
-const url = `${bakcendIp}:${backendPort}`;
+// const backendPort = import.meta.env.VITE_BACKEND_PORT;
+const url = `${bakcendIp}`;
 
 const UserPostList = ({ currentUser }) => {
 	const [userPosts, setUserPosts] = useState([]);
