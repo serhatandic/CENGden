@@ -3,6 +3,15 @@ I set the authentication token at 14.04.2024, it has 30 days till expiration, if
 Backend url : https://cengden-backend-2p3r.onrender.com
 Frontend url : https://cengden.vercel.app/
 
+users:
+- admin@ceng.metu.edu.tr (admin user)
+- password: s12345678.
+
+- e2442424@ceng.metu.edu.tr
+- password: s12345678.
+
+- serhat.andic@ceng.metu.edu.tr
+- password: s12345678.
 
 The project consists of 3 parts: Frontend, Backend server, Database.
 
@@ -29,6 +38,6 @@ Each post on the home page has a title, description and a category. Also there a
 
 -   Read more button redirects the user to the details view for the corresponding item. In this view all the details about the post can be seen.
 
--   There is a add post button on the navbar, when the button is clicked user is redirected to the add post view. In this view user is asked to choose a category, after a category is chosen the fields for that category is shown. After the user fills each field he/she can submit the form. After submission a post request is sent to the "/api/items" endpoint and the user is redirected to the home page. The endpoint inserts the item to the database collection "Items". User can also add custom fields, and for each of the fields (except the required ones) user can add sub fields. 
+-   There is a add post button on the navbar, when the button is clicked user is redirected to the add post view. In this view user is asked to choose a category, after a category is chosen the fields for that category is shown. After the user fills each field he/she can submit the form. After submission a post request is sent to the "/api/items" endpoint and the user is redirected to the home page. The endpoint inserts the item to the database collection "Items". User can also add custom fields, and for each of the fields (except the required ones) user can add sub fields (using multi checkbox). 
 
 -   If user click's the part where the user icon is shown, he/she is redirected to the profile page. In this page user can see the profile details and also the posts that he/she shared. Profile details can be edited, user should just click the edit profile button and the fields become editable. After user edits the fields and saves the changes, the information is updated (a request is sent to the auth0 api for this purpose). In this page user can activate / deactive posts. Deactivated posts are not shown to other users. Upon clicking activate / deactivate buttons a put request is sent to the "/api/item/:itemId" endpoint. This endpoint queries the db collection "Items" to find the corresponding item and then updates it with this new information.
