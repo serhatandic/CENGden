@@ -263,6 +263,9 @@ const EditPost = ({ currentUser, allUsers }) => {
 										const newField = prompt(
 											'Enter the name of the new field'
 										);
+										if (!newField) {
+											return;
+										}
 										setCategories({
 											...categories,
 											[category]: [
