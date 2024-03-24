@@ -1,5 +1,7 @@
 I set the authentication token at 14.04.2024, it has 30 days till expiration, if it expires it may cause error related to authentication. I will try to update it throughout the semester but in case you encounter errors related to authentication it would be great if you reached me before giving the final grade.
 
+Backend url : https://cengden-backend-2p3r.onrender.com
+Frontend url : https://cengden.vercel.app/
 
 
 The project consists of 3 parts: Frontend, Backend server, Database.
