@@ -30,7 +30,6 @@ const MultiFieldInput = ({ field, setPostData, attributeTree, isEdit }) => {
 								defaultValue={attributeTree[key]}
 								onChange={(e) => {
 									setPostData((prev) => {
-										console.log(prev.Attributes);
 										return {
 											...prev,
 											Attributes: {
@@ -92,6 +91,21 @@ const MultiFieldInput = ({ field, setPostData, attributeTree, isEdit }) => {
 									'Enter the field name'
 								);
 								setNewFields([...newFields, fieldName]);
+								// trigger attributeTree update
+								setPostData((prev) => {
+									return {
+										...prev,
+										Attributes: {
+											...prev?.['Attributes'],
+											[field]: {
+												...prev?.['Attributes']?.[
+													field
+												],
+												[fieldName]: '',
+											},
+										},
+									};
+								});
 							}}
 						>
 							Add new Field

@@ -27,7 +27,6 @@ const Post = ({ post, currentUser }) => {
 		};
 		fetchUserFavorites();
 	}, [currentUser, shouldRefetch]);
-
 	const handleFavoriteChange = (postId, action) => async () => {
 		if (action === 'add') {
 			// update user favorites
@@ -61,6 +60,8 @@ const Post = ({ post, currentUser }) => {
 			setShouldRefetch(true);
 		}
 	};
+	if (!post || !currentUser) return null;
+
 	return (
 		<Box
 			sx={{

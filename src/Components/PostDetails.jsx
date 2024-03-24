@@ -9,10 +9,55 @@ import Button from '@mui/material/Button';
 const bakcendIp = import.meta.env.VITE_BACKEND_IP;
 const backendPort = import.meta.env.VITE_BACKEND_PORT;
 const url = `${bakcendIp}:${backendPort}`;
+const auth0token = import.meta.env.VITE_AUTH0_TOKEN;
+const auth0domain = import.meta.env.VITE_AUTH0_DOMAIN;
 
 const PostDetails = ({ allUsers, currentUser }) => {
 	const { id } = useParams();
 	const [postDetails, setPostDetails] = useState({});
+	const [isProfilePublic, setIsProfilePublic] = useState(false);
+	const [adminUsers, setAdminUsers] = useState([]);
+
+	const isUserAdmin = adminUsers.some(
+		(user) => user.user_id === currentUser.user_id
+	);
+	console.log(postDetails);
+	useEffect(() => {
+		var myHeaders = new Headers();
+		myHeaders.append('Accept', 'application/json');
+		myHeaders.append('Authorization', auth0token);
+
+		var requestOptions = {
+			method: 'GET',
+			headers: myHeaders,
+			redirect: 'follow',
+		};
+
+		fetch(
+			`https://${auth0domain}/api/v2/roles/rol_73zk03NBdD7qLKXD/users`,
+			requestOptions
+		)
+			.then((response) => response.json())
+			.then((result) => {
+				// iterate through the users array and check if the user is in the array
+				setAdminUsers(result);
+			})
+			.catch((error) => console.log('error', error));
+	}, []);
+
+	useEffect(() => {
+		if (!postDetails?.Owner) return;
+		const fetchIsPublic = async () => {
+			const response = await fetch(
+				`${url}/api/user/${postDetails.Owner}/isPublic`
+			);
+			const data = await response.json();
+			setIsProfilePublic(data);
+			console.log(data);
+		};
+		fetchIsPublic();
+	}, [postDetails?.Owner]);
+
 	useEffect(() => {
 		const fetchPost = async () => {
 			const response = await fetch(`${url}/api/item/${id}`);
@@ -22,6 +67,29 @@ const PostDetails = ({ allUsers, currentUser }) => {
 		fetchPost();
 	}, [id]);
 
+	const deleteUser = async () => {
+		var myHeaders = new Headers();
+		myHeaders.append('Authorization', auth0token);
+
+		var requestOptions = {
+			method: 'DELETE',
+			headers: myHeaders,
+			redirect: 'follow',
+		};
+
+		fetch(
+			`https://${auth0domain}/api/v2/users/${postDetails.Owner}`,
+			requestOptions
+		)
+			.then((response) => response.text())
+			.then(() => {
+				fetch(`${url}/api/user/${postDetails.Owner}`, {
+					method: 'DELETE',
+				});
+				window.location.href = '/';
+			})
+			.catch((error) => console.log('error', error));
+	};
 	return (
 		postDetails && (
 			<Box
@@ -143,34 +211,62 @@ const PostDetails = ({ allUsers, currentUser }) => {
 						<Typography variant='body1'>
 							{postDetails.OwnerName}
 						</Typography>
-						{allUsers.map((user) => {
-							if (
-								user.user_id === postDetails.Owner &&
-								user.user_metadata
-							) {
-								return (
-									<Box
-										key={user.id}
-										style={{ marginBottom: '10px' }}
-									>
-										{currentUser?.user_id && (
-											<>
-												<Typography variant='body1'>
-													{user.email}
-												</Typography>
-												<Typography variant='body1'>
-													{
-														user.user_metadata
-															.phone_number
-													}
-												</Typography>
-											</>
-										)}
-									</Box>
-								);
-							}
-							return null;
-						})}
+						{!isProfilePublic || isUserAdmin ? (
+							<>
+								{allUsers.map((user) => {
+									if (
+										user.user_id === postDetails.Owner &&
+										user.user_metadata
+									) {
+										return (
+											<Box
+												key={user.id}
+												style={{ marginBottom: '10px' }}
+											>
+												{(currentUser?.user_id ||
+													isProfilePublic) && (
+													<>
+														<Typography variant='body1'>
+															{user.email}
+														</Typography>
+														<Typography variant='body1'>
+															{
+																user
+																	.user_metadata
+																	.phone_number
+															}
+														</Typography>
+													</>
+												)}
+											</Box>
+										);
+									}
+									return null;
+								})}
+							</>
+						) : (
+							<Box
+								key={postDetails.Owner}
+								style={{ marginBottom: '10px' }}
+							>
+								<Typography variant='body1'>
+									{postDetails.OwnerEmail}
+								</Typography>
+								<Typography variant='body1'>
+									{postDetails.OwnerPhone}
+								</Typography>
+							</Box>
+						)}
+						<>
+							{isUserAdmin ? (
+								<Button
+									variant='contained'
+									onClick={deleteUser}
+								>
+									Delete User
+								</Button>
+							) : null}
+						</>
 					</Box>
 					{postDetails?.Attributes && (
 						<Box>

@@ -12,7 +12,7 @@ const AddPost = ({ userRole, currentUser }) => {
 	const [category, setCategory] = useState('');
 	const [multiDictionary, setMultiDictionary] = useState({});
 	const [postData, setPostData] = useState({
-		Owner: currentUser.user_id,
+		Owner: currentUser?.user_id,
 	});
 	const handleCategoryChange = (category) => {
 		setCategory(category);
@@ -124,6 +124,8 @@ const AddPost = ({ userRole, currentUser }) => {
 					{
 						Owner: currentUser.user_id,
 						OwnerName: currentUser.user_metadata.name,
+						OwnerEmail: currentUser.email,
+						OwnerPhone: currentUser.user_metadata.phone_number,
 						createdAt: new Date(),
 						Category: category,
 						Status: 'active',
@@ -135,6 +137,9 @@ const AddPost = ({ userRole, currentUser }) => {
 		window.location.href = '/';
 	};
 
+	if (!currentUser) {
+		return <Box>Loading...</Box>;
+	}
 	return (
 		<>
 			{userRole === 'regular' ? (

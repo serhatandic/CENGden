@@ -149,6 +149,8 @@ const EditPost = ({ currentUser, allUsers }) => {
 					{
 						Owner: currentUser.user_id,
 						OwnerName: currentUser.user_metadata.name,
+						OwnerEmail: currentUser.email,
+						OwnerPhone: currentUser.user_metadata.phone_number,
 						createdAt: new Date(),
 						Category: category,
 						...postData,

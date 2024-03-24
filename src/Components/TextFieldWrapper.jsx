@@ -79,7 +79,7 @@ const TextFieldWrapper = ({
 			) : (
 				<TextField
 					type={field === 'Price' ? 'number' : 'text'}
-					key={Math.random()}
+					key={field}
 					name={field}
 					label={field}
 					fullWidth
