@@ -13,6 +13,8 @@ import TextFieldWrapper from './TextFieldWrapper';
 const bakcendIp = import.meta.env.VITE_BACKEND_IP;
 // const backendPort = import.meta.env.VITE_BACKEND_PORT;
 const url = `${bakcendIp}`;
+const auth0token = import.meta.env.VITE_AUTH0_TOKEN;
+const auth0domain = import.meta.env.VITE_AUTH0_DOMAIN;
 
 const EditPost = ({ currentUser, allUsers }) => {
 	const { id } = useParams();
@@ -22,6 +24,8 @@ const EditPost = ({ currentUser, allUsers }) => {
 	const [prevPrice, setPrevPrice] = useState(999999);
 	const [favoritedBy, setFavoritedBy] = useState([]);
 	const [loading, setLoading] = useState(true);
+	const [adminUsers, setAdminUsers] = useState([]);
+
 	const [categories, setCategories] = useState({
 		Vehicles: [
 			'Title',
@@ -101,6 +105,33 @@ const EditPost = ({ currentUser, allUsers }) => {
 				setFavoritedBy(data);
 			});
 	}, [id, currentUser]);
+
+	const isUserAdmin = adminUsers?.some(
+		(user) => user.user_id === currentUser.user_id
+	);
+	useEffect(() => {
+		var myHeaders = new Headers();
+		myHeaders.append('Accept', 'application/json');
+		myHeaders.append('Authorization', auth0token);
+
+		var requestOptions = {
+			method: 'GET',
+			headers: myHeaders,
+			redirect: 'follow',
+		};
+
+		fetch(
+			`https://${auth0domain}/api/v2/roles/rol_73zk03NBdD7qLKXD/users`,
+			requestOptions
+		)
+			.then((response) => response.json())
+			.then((result) => {
+				// iterate through the users array and check if the user is in the array
+				setAdminUsers(result);
+			})
+			.catch((error) => console.log('error', error));
+	}, []);
+
 	const handleChange = (e) => {
 		const { name, value } = e.target;
 
@@ -178,7 +209,7 @@ const EditPost = ({ currentUser, allUsers }) => {
 	if (loading) {
 		return <div>Loading...</div>;
 	}
-	if (postData?.Owner !== currentUser.user_id) {
+	if (!isUserAdmin && postData?.Owner !== currentUser.user_id) {
 		return <div>Unauthorized</div>;
 	}
 	return (

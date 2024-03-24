@@ -11,10 +11,13 @@ import { Link } from 'react-router-dom';
 const bakcendIp = import.meta.env.VITE_BACKEND_IP;
 // const backendPort = import.meta.env.VITE_BACKEND_PORT;
 const url = `${bakcendIp}`;
+const auth0token = import.meta.env.VITE_AUTH0_TOKEN;
+const auth0domain = import.meta.env.VITE_AUTH0_DOMAIN;
 
 const Post = ({ post, currentUser }) => {
 	const [userFavorites, setUserFavorites] = useState([]);
 	const [shouldRefetch, setShouldRefetch] = useState(false);
+	const [adminUsers, setAdminUsers] = useState([]);
 
 	useEffect(() => {
 		const fetchUserFavorites = async () => {
@@ -60,6 +63,33 @@ const Post = ({ post, currentUser }) => {
 			setShouldRefetch(true);
 		}
 	};
+
+	const isUserAdmin = adminUsers?.some(
+		(user) => user.user_id === currentUser.user_id
+	);
+	useEffect(() => {
+		var myHeaders = new Headers();
+		myHeaders.append('Accept', 'application/json');
+		myHeaders.append('Authorization', auth0token);
+
+		var requestOptions = {
+			method: 'GET',
+			headers: myHeaders,
+			redirect: 'follow',
+		};
+
+		fetch(
+			`https://${auth0domain}/api/v2/roles/rol_73zk03NBdD7qLKXD/users`,
+			requestOptions
+		)
+			.then((response) => response.json())
+			.then((result) => {
+				// iterate through the users array and check if the user is in the array
+				setAdminUsers(result);
+			})
+			.catch((error) => console.log('error', error));
+	}, []);
+
 	if (!post || !currentUser) return null;
 
 	return (
@@ -120,7 +150,7 @@ const Post = ({ post, currentUser }) => {
 						justifyContent: 'space-between',
 					}}
 				>
-					{currentUser.user_id === post.Owner ? (
+					{currentUser.user_id === post.Owner || isUserAdmin ? (
 						<Box>
 							<Link to={`/edit/${post._id}`}>
 								<Button
