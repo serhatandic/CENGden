@@ -21,6 +21,7 @@ const EditPost = ({ currentUser, allUsers }) => {
 	const [postData, setPostData] = useState({});
 	const [prevPrice, setPrevPrice] = useState(999999);
 	const [favoritedBy, setFavoritedBy] = useState([]);
+	const [loading, setLoading] = useState(true);
 	const [categories, setCategories] = useState({
 		Vehicles: [
 			'Title',
@@ -83,6 +84,7 @@ const EditPost = ({ currentUser, allUsers }) => {
 		],
 	});
 	useEffect(() => {
+		setLoading(true);
 		fetch(`${url}/api/item/${id}`)
 			.then((res) => res.json())
 			.then((res) => {
@@ -90,6 +92,7 @@ const EditPost = ({ currentUser, allUsers }) => {
 				setPostData(data);
 				setPrevPrice(data.Price);
 				setCategory(data.Category);
+				setLoading(false);
 			});
 
 		fetch(`${url}/api/items/${id}/favoritedBy`)
@@ -172,6 +175,12 @@ const EditPost = ({ currentUser, allUsers }) => {
 		}
 		window.location.href = '/post/' + id;
 	};
+	if (loading) {
+		return <div>Loading...</div>;
+	}
+	if (postData?.Owner !== currentUser.user_id) {
+		return <div>Unauthorized</div>;
+	}
 	return (
 		<div>
 			{
