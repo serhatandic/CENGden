@@ -1,7 +1,7 @@
-I set the authentication token at 14.04.2024, it has 30 days till expiration, if it expires it may cause error related to authentication. I will try to update it throughout the semester but in case you encounter errors related to authentication it would be great if you reached me before giving the final grade.
+I set the authentication token at 29.04.2024, it has 30 days till expiration, if it expires it may cause errors related to authentication. I will try to update it throughout the semester but in case you encounter errors related to authentication it would be great if you reached me before giving the final grade.
 
 Backend url : https://cengden-backend-2p3r.onrender.com
-Frontend url : https://cengden.vercel.app/
+Frontend url : https://cengden.vercel.app/ or https://cengden.me
 
 users:
 - admin@ceng.metu.edu.tr (admin user)
